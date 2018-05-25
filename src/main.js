@@ -17,3 +17,6 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
+
+
+export const bus = new Vue()
