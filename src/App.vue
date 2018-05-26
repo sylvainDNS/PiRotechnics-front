@@ -12,18 +12,6 @@
   </v-app>
 </template>
 
-<script>
-export default {
-    data() {
-        return {
-            items: [],
-            title: 'PiRotechnics'
-        }
-    },
-    name: 'App'
-}
-</script>
-
 <style scoped>
 .center {
     display: block;

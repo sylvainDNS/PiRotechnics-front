@@ -46,7 +46,7 @@
 import axios from 'axios'
 import moment from 'moment'
 import AddShow from './AddShow'
-import { bus } from '../main'
+import { bus } from '../workers/bus'
 
 const rootApi = process.env.API_URL + ':' + process.env.API_PORT
 

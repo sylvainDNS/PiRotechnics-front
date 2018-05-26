@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { bus } from '../main'
+import { bus } from '../workers/bus'
 import axios from 'axios'
 
 const rootApi = process.env.API_URL + ':' + process.env.API_PORT
@@ -44,9 +44,7 @@ export default {
         dialog: false,
         valid: true,
         name: '',
-        nameRules: [
-            v => !!v || 'Un nom est obligatoire',
-        ],
+        nameRules: [v => !!v || 'Un nom est obligatoire'],
         password: ''
     }),
     created() {
