@@ -5,8 +5,13 @@ import App from './App'
 import router from './router'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
+import colors from 'vuetify/es5/util/colors'
 
-Vue.use(Vuetify)
+Vue.use(Vuetify, {
+  theme: {
+    info: colors.blueGrey.base
+  }
+})
 
 Vue.config.productionTip = false
 

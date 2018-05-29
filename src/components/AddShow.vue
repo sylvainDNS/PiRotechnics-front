@@ -17,7 +17,7 @@
 
                     <v-btn 
                     color="blue darken-1" 
-                    @click.native="dialog = false"
+                    @click="dialog = false"
                     >
                     Annuler
                     </v-btn>
@@ -48,17 +48,22 @@ export default {
         password: ''
     }),
     created() {
-        bus.$on('dialog', value => {
+        bus.$on('openAddShow', value => {
             this.dialog = value
         })
     },
     methods: {
         submit() {
             if (this.$refs.form.validate()) {
-                axios.post(rootApi + '/show', {
-                    name: this.name,
-                    password: this.password == '' ? null : this.password
-                })
+                axios
+                    .post(rootApi + '/show', {
+                        name: this.name,
+                        password: this.password == '' ? null : this.password
+                    })
+                    .then(() => {
+                        this.dialog = false
+                        bus.$emit('refresh')
+                    })
             }
         }
     }
