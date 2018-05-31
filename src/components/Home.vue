@@ -67,7 +67,7 @@ export default {
     },
     created() {
         this.getShows()
-        bus.$on('refresh', () => {
+        bus.$on('refreshShows', () => {
             this.getShows()
         })
     },

@@ -17,7 +17,7 @@
 
                     <v-btn 
                     color="blue darken-1" 
-                    @click="dialog = false"
+                    @click="clean"
                     >
                     Annuler
                     </v-btn>
@@ -42,7 +42,7 @@ const rootApi = process.env.API_URL + ':' + process.env.API_PORT
 export default {
     data: () => ({
         dialog: false,
-        valid: true,
+        valid: false,
         name: '',
         nameRules: [v => !!v || 'Un nom est obligatoire'],
         password: ''
@@ -61,10 +61,14 @@ export default {
                         password: this.password == '' ? null : this.password
                     })
                     .then(() => {
-                        this.dialog = false
-                        bus.$emit('refresh')
+                        this.clean()
+                        bus.$emit('refreshShows')
                     })
             }
+        },
+        clean() {
+            this.dialog = false
+            this.$refs.form.reset()
         }
     }
 }
