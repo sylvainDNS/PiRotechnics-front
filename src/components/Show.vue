@@ -126,15 +126,14 @@ export default {
             this.disabled = !this.disabled
         },
         getSteps() {
-            axios.get(rootApi + '/show/' + this.show_id + '/step').then(response => {
-                this.steps = response.data
+            axios.get(rootApi + '/show/' + this.show.show_id + '/step').then(response => {
+                this.show.steps = response.data
             })
         },
         openAddStep() {
             const reply = {
                 value: true,
-                show_id: this.show.show_id,
-                stepsLength: this.show.steps.length
+                show: this.show
             }
             bus.$emit('openAddStep', reply)
         }

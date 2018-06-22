@@ -52,10 +52,10 @@ export default {
         dialog: false,
         valid: false,
         name: '',
-        time: null,
-        channel: null,
+        time: 0,
+        channel: 0,
         show_id: '',
-        stepsLength: null,
+        orderCursor: 0,
         nameRules: [v => !!v || 'Un nom est obligatoire'],
         timeRules: [v => !!v || 'Une durée est obligatoire'],
         channelRules: [v => !!v || 'Un canal est obligatoire'],
@@ -94,23 +94,23 @@ export default {
     created() {
         bus.$on('openAddStep', reply => {
             this.dialog = reply.value
-            this.show_id = reply.show_id
-            this.stepsLength = reply.stepsLength
+            this.show_id = reply.show.show_id
+            this.orderCursor = reply.show.steps.length
+
+            const usedChannels = reply.show.steps.map(step => {
+                return step.channel
+            })
+
+            this.channels = this.channels.filter(channel => !usedChannels.includes(channel))
         })
     },
     methods: {
         submit() {
             if (this.$refs.form.validate()) {
-                console.log(this.show_id)
-                console.log(this.stepsLength)
-                console.log(this.name)
-                console.log(this.channel)
-                console.log(this.time)
-
                 axios
                     .post(rootApi + '/step', {
                         show_id: this.show_id,
-                        cueOrder: this.stepsLength + 1,
+                        cueOrder: this.getCursor(),
                         name: this.name,
                         channel: this.channel,
                         time: this.time
@@ -120,6 +120,10 @@ export default {
                         bus.$emit('refreshSteps')
                     })
             }
+        },
+        getCursor() {
+            this.orderCursor++
+            return this.orderCursor
         },
         clean() {
             this.dialog = false
