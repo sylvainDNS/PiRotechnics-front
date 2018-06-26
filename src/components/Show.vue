@@ -30,64 +30,60 @@
       </v-toolbar>
       <v-card>
         <v-container fluid grid-list-md>
-          <v-layout row wrap>
-            <v-flex class="step"
-              v-for="step in show.steps"
-              v-bind:key="step.step_id"
-              v-bind:index="step.cueOrder"
-              v-bind:item="step"
+           <v-data-iterator
+            :items="show.steps"
+            :rows-per-page-items="rowsPerPageItems"
+            :pagination.sync="pagination"
+            content-tag="v-layout"
+            row
+            wrap
+            >
+            <v-flex
+              slot="item"
+              slot-scope="props"
+              xs12
+              sm6
+              md4
+              lg3
             >
               <v-card>
-                <div class="headline editor-field">
-                  <v-text-field
-                    :disabled="disabled"
-                    name="step-name"
-                    :value="step.name"
-                  ></v-text-field>
-                </div>
-                <v-layout row>
-                  <v-flex xs4>
-                    <v-subheader class="composant">Canal</v-subheader>
-                  </v-flex>
-                  <v-flex xs8>
-                    <v-text-field class="editor-field"
-                      :disabled="disabled"
-                      name="channel"
-                      :value="step.channel"
-                    ></v-text-field>
-                  </v-flex>
-                </v-layout>
-                <v-layout row>
-                  <v-flex xs4>
-                    <v-subheader>Durée</v-subheader>
-                  </v-flex>
-                  <v-flex xs8>
-                    <v-text-field class="editor-field"
-                      :disabled="disabled"
-                      name="time"
-                      :value="step.time"
-                    ></v-text-field>
-                  </v-flex>
-                </v-layout>
+                <v-card-title>
+                  <h4>{{ props.item.name }}</h4>
+                  <v-spacer></v-spacer>
+                  <v-btn flat icon small>
+                    <v-icon dark>close</v-icon>
+                  </v-btn>
+                </v-card-title>
+                
+                <v-divider></v-divider>
+                <v-list dense>
+                  <v-list-tile>
+                    <v-list-tile-content>Canal:</v-list-tile-content>
+                    <v-list-tile-content class="align-end">{{ props.item.channel }}</v-list-tile-content>
+                  </v-list-tile>
+                  <v-list-tile>
+                    <v-list-tile-content>Durée:</v-list-tile-content>
+                    <v-list-tile-content class="align-end">{{ props.item.time }}</v-list-tile-content>
+                  </v-list-tile>
+                </v-list>
               </v-card>
             </v-flex>
-            <v-btn  @click.prevent='openAddStep()'
-              fixed
-              dark
-              fab
-              bottom
-              right
-              color=primary
-            >
-              <v-icon>add</v-icon>
-            </v-btn>
-          </v-layout>
+          </v-data-iterator>
+          <v-btn  @click.prevent='openAddStep()'
+            fixed
+            dark
+            fab
+            bottom
+            right
+            color=primary
+          >
+            <v-icon>add</v-icon>
+          </v-btn>
         </v-container>
       </v-card>
       <AddStep/>
     </v-dialog>
 </template>
-
 <script>
 import { bus } from '../workers/bus'
 import AddStep from './AddStep'
@@ -108,13 +104,18 @@ export default {
                 steps: []
             },
             editing: false,
-            disabled: true
+            disabled: true,
+            rowsPerPageItems: [4, 8, 12],
+            pagination: {
+                rowsPerPage: 4
+            }
         }
     },
     created() {
         bus.$on('openShow', show => {
             this.dialog = true
             this.show = show
+            console.log(this.show)
         })
         bus.$on('refreshSteps', () => {
             this.getSteps()
