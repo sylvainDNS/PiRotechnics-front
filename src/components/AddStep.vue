@@ -16,7 +16,14 @@
                     required
                     ></v-text-field>
                     <v-select
-                    v-model.number="channel"
+                    v-model.number="currentCueOrder"
+                    :items="cueOrders"
+                    :rules="cueOrderRules"
+                    label="Ordre"
+                    required
+                    ></v-select>
+                    <v-select
+                    v-model.number="currentChannel"
                     :items="channels"
                     :rules="channelRules"
                     label="Canal"
@@ -53,43 +60,16 @@ export default {
         valid: false,
         name: '',
         time: 0,
-        channel: 0,
+        currentChannel: 0,
+        currentCueOrder: 0,
         show_id: '',
         orderCursor: 0,
         nameRules: [v => !!v || 'Un nom est obligatoire'],
         timeRules: [v => !!v || 'Une durée est obligatoire'],
         channelRules: [v => !!v || 'Un canal est obligatoire'],
-        channels: [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9,
-            10,
-            11,
-            12,
-            13,
-            14,
-            15,
-            16,
-            17,
-            18,
-            19,
-            20,
-            21,
-            22,
-            23,
-            24,
-            25,
-            26,
-            27,
-            28,
-            29
-        ]
+        channels: Array.from({ length: 28 }, (v, k) => k + 1),
+        cueOrderRules: [v => !!v || 'Un ordre est obligatoire'],
+        cueOrders: Array.from({ length: 28 }, (v, k) => k + 1)
     }),
     created() {
         bus.$on('openAddStep', reply => {
@@ -100,8 +80,12 @@ export default {
             const usedChannels = reply.show.steps.map(step => {
                 return step.channel
             })
+            const usedCueOrders = reply.show.steps.map(step => {
+                return step.cueOrder
+            })
 
             this.channels = this.channels.filter(channel => !usedChannels.includes(channel))
+            this.cueOrders = this.cueOrders.filter(cueOrder => !usedCueOrders.includes(cueOrder))
         })
     },
     methods: {
@@ -110,9 +94,9 @@ export default {
                 axios
                     .post(rootApi + '/step', {
                         show_id: this.show_id,
-                        cueOrder: this.getCursor(),
+                        cueOrder: this.currentCueOrder,
                         name: this.name,
-                        channel: this.channel,
+                        channel: this.currentChannel,
                         time: this.time
                     })
                     .then(() => {
@@ -128,7 +112,8 @@ export default {
         clean() {
             this.dialog = false
             this.$refs.form.reset()
-        }
+        },
+        unusedMap() {}
     }
 }
 </script>

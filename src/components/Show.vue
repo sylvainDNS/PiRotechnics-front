@@ -58,6 +58,10 @@
                 <v-divider></v-divider>
                 <v-list dense>
                   <v-list-tile>
+                    <v-list-tile-content>Ordre:</v-list-tile-content>
+                    <v-list-tile-content class="align-end">{{ props.item.cueOrder }}</v-list-tile-content>
+                  </v-list-tile>
+                  <v-list-tile>
                     <v-list-tile-content>Canal:</v-list-tile-content>
                     <v-list-tile-content class="align-end">{{ props.item.channel }}</v-list-tile-content>
                   </v-list-tile>
@@ -115,7 +119,6 @@ export default {
         bus.$on('openShow', show => {
             this.dialog = true
             this.show = show
-            console.log(this.show)
         })
         bus.$on('refreshSteps', () => {
             this.getSteps()
