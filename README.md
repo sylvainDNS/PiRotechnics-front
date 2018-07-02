@@ -1,5 +1,7 @@
 **Live demo available : [pirotechnics.sylvaindenyse.me](https://pirotechnics.sylvaindenyse.me "PiRotechnics")**
 
+![Project progress](https://img.shields.io/badge/Project%20progress-20%25-blue.svg)
+
 ![PiRotechnics](src/assets/logo.png)
 # PiRotechnics
 > A Vue.js project
