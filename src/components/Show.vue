@@ -12,15 +12,6 @@
           flat
           ><v-icon>delete</v-icon>
           </v-btn>
-          <v-btn
-          round
-          flat
-          v-on:click="edit()"
-          class="edit"
-          >
-          <v-icon v-if="!editing">edit</v-icon>
-          <v-icon v-else>save</v-icon>
-          </v-btn>
           <v-btn 
           round
           flat
@@ -50,7 +41,7 @@
                 <v-card-title>
                   <h4>{{ props.item.name }}</h4>
                   <v-spacer></v-spacer>
-                  <v-btn flat icon small>
+                  <v-btn flat icon small @click.prevent='deleteStep(props.item.step_id)'>
                     <v-icon dark>close</v-icon>
                   </v-btn>
                 </v-card-title>
@@ -125,10 +116,6 @@ export default {
         })
     },
     methods: {
-        edit() {
-            this.editing = !this.editing
-            this.disabled = !this.disabled
-        },
         getSteps() {
             axios.get(rootApi + '/show/' + this.show.show_id + '/step').then(response => {
                 this.show.steps = response.data
@@ -140,6 +127,9 @@ export default {
                 show: this.show
             }
             bus.$emit('openAddStep', reply)
+        },
+        deleteStep(step_id) {
+            axios.delete(rootApi + '/step/' + step_id).then(() => this.getSteps())
         }
     }
 }

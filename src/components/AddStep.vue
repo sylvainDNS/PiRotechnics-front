@@ -67,9 +67,9 @@ export default {
         nameRules: [v => !!v || 'Un nom est obligatoire'],
         timeRules: [v => !!v || 'Une durée est obligatoire'],
         channelRules: [v => !!v || 'Un canal est obligatoire'],
-        channels: Array.from({ length: 28 }, (v, k) => k + 1),
+        channels: [],
         cueOrderRules: [v => !!v || 'Un ordre est obligatoire'],
-        cueOrders: Array.from({ length: 28 }, (v, k) => k + 1)
+        cueOrders: []
     }),
     created() {
         bus.$on('openAddStep', reply => {
@@ -84,8 +84,12 @@ export default {
                 return step.cueOrder
             })
 
-            this.channels = this.channels.filter(channel => !usedChannels.includes(channel))
-            this.cueOrders = this.cueOrders.filter(cueOrder => !usedCueOrders.includes(cueOrder))
+            this.channels = Array.from({ length: 28 }, (v, k) => k + 1).filter(
+                channel => !usedChannels.includes(channel)
+            )
+            this.cueOrders = Array.from({ length: 28 }, (v, k) => k + 1).filter(
+                cueOrder => !usedCueOrders.includes(cueOrder)
+            )
         })
     },
     methods: {
