@@ -33,6 +33,7 @@
               bottom
               right
               color=primary
+              title="Ajouter un show"
             >
               <v-icon>add</v-icon>
             </v-btn>

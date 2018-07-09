@@ -1,7 +1,7 @@
 <template>
     <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-toolbar dark color="primary">
-        <v-btn icon dark @click.native="dialog = false">
+        <v-btn icon dark @click.native="dialog=false" title="Retour à l'accueil">
           <v-icon>close</v-icon>
         </v-btn>
         <v-toolbar-title>{{ show.name }}</v-toolbar-title>
@@ -10,6 +10,7 @@
           <v-btn
           round
           flat
+          title='Supprimer le show'
           ><v-icon>delete</v-icon>
           </v-btn>
           <v-btn 
@@ -41,7 +42,7 @@
                 <v-card-title>
                   <h4>{{ props.item.name }}</h4>
                   <v-spacer></v-spacer>
-                  <v-btn flat icon small @click.prevent='deleteStep(props.item.step_id)'>
+                  <v-btn flat icon small @click.prevent='deleteStep(props.item.step_id)' title="Supprimer l'étape">
                     <v-icon dark>close</v-icon>
                   </v-btn>
                 </v-card-title>
@@ -71,6 +72,7 @@
             bottom
             right
             color=primary
+            title="Ajouter une étape"
           >
             <v-icon>add</v-icon>
           </v-btn>
