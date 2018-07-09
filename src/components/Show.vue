@@ -40,7 +40,7 @@
             >
               <v-card>
                 <v-card-title>
-                  <h4>{{ props.item.name }}</h4>
+                  <h4>Etape {{ props.index+1 }}</h4>
                   <v-spacer></v-spacer>
                   <v-btn flat icon small @click.prevent='deleteStep(props.item.step_id)' title="Supprimer l'étape">
                     <v-icon dark>close</v-icon>
@@ -49,14 +49,6 @@
                 
                 <v-divider></v-divider>
                 <v-list dense>
-                  <v-list-tile>
-                    <v-list-tile-content>Ordre:</v-list-tile-content>
-                    <v-list-tile-content class="align-end">{{ props.item.cueOrder }}</v-list-tile-content>
-                  </v-list-tile>
-                  <v-list-tile>
-                    <v-list-tile-content>Canal:</v-list-tile-content>
-                    <v-list-tile-content class="align-end">{{ props.item.channel }}</v-list-tile-content>
-                  </v-list-tile>
                   <v-list-tile>
                     <v-list-tile-content>Durée:</v-list-tile-content>
                     <v-list-tile-content class="align-end">{{ props.item.time }}</v-list-tile-content>
@@ -102,9 +94,9 @@ export default {
             },
             editing: false,
             disabled: true,
-            rowsPerPageItems: [4, 8, 12],
+            rowsPerPageItems: [6, 12, 18],
             pagination: {
-                rowsPerPage: 4
+                rowsPerPage: 6
             }
         }
     },

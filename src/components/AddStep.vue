@@ -4,41 +4,23 @@
             <v-card id="frame">
                 <v-form ref="form" v-model="valid" lazy-validation>
                     <v-text-field
-                    v-model="name"
-                    :rules="nameRules"
-                    label="Nom"
-                    required
-                    ></v-text-field>
-                    <v-text-field
                     v-model="time"
                     :rules="timeRules"
                     label="Durée"
                     required
                     ></v-text-field>
-                    <v-select
-                    v-model.number="currentCueOrder"
-                    :items="cueOrders"
-                    :rules="cueOrderRules"
-                    label="Ordre"
-                    required
-                    ></v-select>
-                    <v-select
-                    v-model.number="currentChannel"
-                    :items="channels"
-                    :rules="channelRules"
-                    label="Canal"
-                    required
-                    ></v-select>
 
                     <v-btn 
                     color="blue darken-1" 
                     @click="clean"
+                    title="Annuler l'étape"
                     >
                     Annuler
                     </v-btn>
                     <v-btn
                     :disabled="!valid"
                     @click="submit"
+                    title="Ajouter l'étape"
                     >
                     Ajouter
                     </v-btn>
@@ -58,38 +40,16 @@ export default {
     data: () => ({
         dialog: false,
         valid: false,
-        name: '',
-        time: 0,
-        currentChannel: 0,
-        currentCueOrder: 0,
         show_id: '',
         orderCursor: 0,
-        nameRules: [v => !!v || 'Un nom est obligatoire'],
-        timeRules: [v => !!v || 'Une durée est obligatoire'],
-        channelRules: [v => !!v || 'Un canal est obligatoire'],
-        channels: [],
-        cueOrderRules: [v => !!v || 'Un ordre est obligatoire'],
-        cueOrders: []
+        time: 0,
+        timeRules: [v => !!v || 'Une durée est obligatoire']
     }),
     created() {
         bus.$on('openAddStep', reply => {
             this.dialog = reply.value
             this.show_id = reply.show.show_id
             this.orderCursor = reply.show.steps.length
-
-            const usedChannels = reply.show.steps.map(step => {
-                return step.channel
-            })
-            const usedCueOrders = reply.show.steps.map(step => {
-                return step.cueOrder
-            })
-
-            this.channels = Array.from({ length: 28 }, (v, k) => k + 1).filter(
-                channel => !usedChannels.includes(channel)
-            )
-            this.cueOrders = Array.from({ length: 28 }, (v, k) => k + 1).filter(
-                cueOrder => !usedCueOrders.includes(cueOrder)
-            )
         })
     },
     methods: {
@@ -98,9 +58,6 @@ export default {
                 axios
                     .post(rootApi + '/step', {
                         show_id: this.show_id,
-                        cueOrder: this.currentCueOrder,
-                        name: this.name,
-                        channel: this.currentChannel,
                         time: this.time
                     })
                     .then(() => {
@@ -108,10 +65,6 @@ export default {
                         bus.$emit('refreshSteps')
                     })
             }
-        },
-        getCursor() {
-            this.orderCursor++
-            return this.orderCursor
         },
         clean() {
             this.dialog = false
