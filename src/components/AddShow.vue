@@ -48,8 +48,8 @@ export default {
         password: ''
     }),
     created() {
-        bus.$on('openAddShow', value => {
-            this.dialog = value
+        bus.$on('openAddShow', _ => {
+            this.dialog = true
         })
     },
     methods: {

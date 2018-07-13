@@ -31,10 +31,10 @@
 </template>
 
 <script>
-import { bus } from '../workers/bus';
-import axios from 'axios';
+import { bus } from '../workers/bus'
+import axios from 'axios'
 
-const rootApi = process.env.API_URL + ':' + process.env.API_PORT;
+const rootApi = process.env.API_URL + ':' + process.env.API_PORT
 
 export default {
     data: () => ({
@@ -49,11 +49,11 @@ export default {
         ]
     }),
     created() {
-        bus.$on('openAddStep', reply => {
-            this.dialog = reply.value;
-            this.show_id = reply.show.show_id;
-            this.orderCursor = reply.show.steps.length;
-        });
+        bus.$on('openAddStep', show => {
+            this.dialog = true
+            this.show_id = show.show_id
+            this.orderCursor = show.steps.length
+        })
     },
     methods: {
         submit() {
@@ -64,18 +64,18 @@ export default {
                         time: this.time
                     })
                     .then(() => {
-                        this.clean();
-                        bus.$emit('refreshSteps');
-                    });
+                        this.clean()
+                        bus.$emit('refreshSteps')
+                    })
             }
         },
         clean() {
-            this.dialog = false;
-            this.$refs.form.reset();
+            this.dialog = false
+            this.$refs.form.reset()
         },
         unusedMap() {}
     }
-};
+}
 </script>
 
 <style scoped>

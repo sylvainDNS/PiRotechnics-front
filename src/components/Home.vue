@@ -77,7 +77,7 @@ export default {
             return moment(this.getLastDate(show)).fromNow(true)
         },
         openAddShow() {
-            bus.$emit('openAddShow', true)
+            bus.$emit('openAddShow')
         },
         openShow(show_id, show_name) {
             axios.get(rootApi + '/show/' + show_id + '/step').then(response => {

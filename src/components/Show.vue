@@ -111,19 +111,19 @@ export default {
     },
     methods: {
         getSteps() {
-            axios.get(rootApi + '/show/' + this.show.show_id + '/step').then(response => {
-                this.show.steps = response.data
-            })
+            axios
+                .get(rootApi + '/show/' + this.show.show_id + '/step')
+                .then(response => {
+                    this.show.steps = response.data
+                })
         },
         openAddStep() {
-            const reply = {
-                value: true,
-                show: this.show
-            }
-            bus.$emit('openAddStep', reply)
+            bus.$emit('openAddStep', this.show)
         },
         deleteStep(step_id) {
-            axios.delete(rootApi + '/step/' + step_id).then(() => this.getSteps())
+            axios
+                .delete(rootApi + '/step/' + step_id)
+                .then(() => this.getSteps())
         }
     }
 }
