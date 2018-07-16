@@ -40,13 +40,15 @@ import axios from 'axios'
 const rootApi = process.env.API_URL + ':' + process.env.API_PORT
 
 export default {
-    data: () => ({
-        dialog: false,
-        valid: false,
-        name: '',
-        nameRules: [v => !!v || 'Un nom est obligatoire'],
-        password: ''
-    }),
+    data() {
+        return {
+            dialog: false,
+            valid: false,
+            name: '',
+            nameRules: [v => !!v || 'Un nom est obligatoire'],
+            password: ''
+        }
+    },
     created() {
         bus.$on('openAddShow', _ => {
             this.dialog = true

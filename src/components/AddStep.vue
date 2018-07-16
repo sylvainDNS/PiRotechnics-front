@@ -37,17 +37,19 @@ import axios from 'axios'
 const rootApi = process.env.API_URL + ':' + process.env.API_PORT
 
 export default {
-    data: () => ({
-        dialog: false,
-        valid: false,
-        show_id: '',
-        orderCursor: 0,
-        time: 0,
-        timeRules: [
-            v => !!v || 'Une durée est obligatoire',
-            v => v != 0 || 'Une durée ne peut pas être nulle'
-        ]
-    }),
+    data() {
+        return {
+            dialog: false,
+            valid: false,
+            show_id: '',
+            orderCursor: 0,
+            time: 0,
+            timeRules: [
+                v => !!v || 'Une durée est obligatoire',
+                v => v != 0 || 'Une durée ne peut pas être nulle'
+            ]
+        }
+    },
     created() {
         bus.$on('openAddStep', show => {
             this.dialog = true
@@ -72,8 +74,7 @@ export default {
         clean() {
             this.dialog = false
             this.$refs.form.reset()
-        },
-        unusedMap() {}
+        }
     }
 }
 </script>

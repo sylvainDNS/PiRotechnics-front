@@ -11,6 +11,7 @@
           round
           flat
           title='Supprimer le show'
+          @click.prevent='openDeleteShow()'
           ><v-icon>delete</v-icon>
           </v-btn>
           <v-btn 
@@ -71,18 +72,21 @@
         </v-container>
       </v-card>
       <AddStep/>
+      <DeleteShow/>
     </v-dialog>
 </template>
 <script>
 import { bus } from '../workers/bus'
 import AddStep from './AddStep'
+import DeleteShow from './DeleteShow'
 import axios from 'axios'
 
 const rootApi = process.env.API_URL + ':' + process.env.API_PORT
 
 export default {
     components: {
-        AddStep
+        AddStep,
+        DeleteShow
     },
     data() {
         return {
@@ -105,6 +109,9 @@ export default {
             this.dialog = true
             this.show = show
         })
+        bus.$on('closeShow', () => {
+            this.dialog = false
+        })
         bus.$on('refreshSteps', () => {
             this.getSteps()
         })
@@ -123,6 +130,11 @@ export default {
         },
         openAddStep() {
             bus.$emit('openAddStep', this.show)
+        },
+        openDeleteShow() {
+            console.log('delete ?')
+            console.log(this.show)
+            bus.$emit('openDeleteShow', this.show)
         },
         deleteStep(step_id) {
             axios
