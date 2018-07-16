@@ -1,7 +1,7 @@
 <template>
     <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-toolbar dark color="primary">
-        <v-btn icon dark @click.native="dialog=false" title="Retour à l'accueil">
+        <v-btn icon dark @click.prevent='closeShow()' title="Retour à l'accueil">
           <v-icon>close</v-icon>
         </v-btn>
         <v-toolbar-title>{{ show.name }}</v-toolbar-title>
@@ -110,6 +110,10 @@ export default {
         })
     },
     methods: {
+        closeShow() {
+            bus.$emit('refreshShows')
+            this.dialog = false
+        },
         getSteps() {
             axios
                 .get(rootApi + '/show/' + this.show.show_id + '/step')
