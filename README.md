@@ -1,5 +1,6 @@
-**LIVE DEMO AVAILABLE** (selfhosted, builded and deployed with Jenkins) **: [https://pirotechnics.sylvaindenyse.me](https://goo.gl/Wj3wDk 'PiRotechnics')**
+**LIVE DEMO AVAILABLE** (selfhosted, builded and deployed with Jenkins) **: [https://pirotechnics.sylvaindenyse.me](http://bit.ly/PiRotechnics 'PiRotechnics')**
 
+[![Build Status](https://jenkins.sylvaindenyse.me/buildStatus/icon?job=build_PiRotechnics-front)](https://jenkins.sylvaindenyse.me/job/build_PiRotechnics-front/)
 ![Project progress](https://img.shields.io/badge/Project%20progress-50%25-blue.svg)
 
 ![PiRotechnics](src/assets/logo.png)
