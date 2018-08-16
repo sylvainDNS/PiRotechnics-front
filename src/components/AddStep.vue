@@ -1,15 +1,9 @@
 <template>
     <v-layout row justify-center>
-        <v-dialog v-model="dialog" persistent max-width="500px">
+        <v-dialog v-model="dialog" persistent  max-width="500px">
             <v-card id="frame">
                 <v-form ref="form" v-model="valid" lazy-validation>
-                    <v-text-field
-                    v-model="time"
-                    :rules="timeRules"
-                    label="Durée"
-                    required
-                    ></v-text-field>
-
+                    <vue-timepicker v-model="time" format="hh:mm:ss"></vue-timepicker>
                     <v-btn 
                     color="blue darken-1" 
                     @click="clean"
@@ -33,6 +27,7 @@
 <script>
 import { bus } from '../workers/bus'
 import axios from 'axios'
+import VueTimepicker from 'vue2-timepicker'
 
 const rootApi = process.env.API_URL + ':' + process.env.API_PORT
 
@@ -43,12 +38,15 @@ export default {
             valid: false,
             show_id: '',
             orderCursor: 0,
-            time: 0,
-            timeRules: [
-                v => !!v || 'Une durée est obligatoire',
-                v => v != 0 || 'Une durée ne peut pas être nulle'
-            ]
+            time: {
+                hh: '00',
+                mm: '00',
+                ss: '00'
+            }
         }
+    },
+    components: {
+        VueTimepicker
     },
     created() {
         bus.$on('openAddStep', show => {
@@ -81,6 +79,11 @@ export default {
 
 <style scoped>
 #frame {
-    padding: 0 10px 10px 10px;
+    padding: 50px;
+}
+
+.dialog.dialog--active {
+    overflow: initial;
+    background-color: red;
 }
 </style>

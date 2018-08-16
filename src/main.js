@@ -7,6 +7,7 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import colors from 'vuetify/es5/util/colors'
 
+
 Vue.use(Vuetify, {
   theme: {
     info: colors.blueGrey.base
@@ -15,7 +16,6 @@ Vue.use(Vuetify, {
 
 Vue.config.productionTip = false
 
-/* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
