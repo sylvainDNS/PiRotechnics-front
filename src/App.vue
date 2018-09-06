@@ -1,24 +1,16 @@
 <template>
-  <v-app id="app">
-    <Drawer/>
-    <router-view/>
-  </v-app>
+  <Home/>
 </template>
 
 <script>
-import Drawer from './components/Drawer'
+import Home from './components/Home'
+
 export default {
   components: {
-    Drawer
+    Home
   },
   data () {
     return {
-      drawer: true,
-      items: [
-        { title: 'Home', icon: 'dashboard' },
-        { title: 'About', icon: 'question_answer' }
-      ],
-      right: null
     }
   }
 }

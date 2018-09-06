@@ -2,8 +2,8 @@
 const merge = require('webpack-merge')
 const prodEnv = require('./prod.env')
 
-module.exports = {
-  NODE_ENV: '"production"',
-  API_URL: '"https://api.pirotechnics.sylvaindenyse.me"',
-  API_PORT: '"443"'
-}
+module.exports = merge(prodEnv, {
+  NODE_ENV: '"development"',
+  API_URL: '"http://localhost"',
+  API_PORT: '"4444"'
+})

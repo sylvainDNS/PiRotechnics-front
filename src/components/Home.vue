@@ -1,43 +1,43 @@
 <template>
-  <v-card height="350px">
-    <v-navigation-drawer v-model="drawer" permanent absolute>
-      <v-toolbar flat class="transparent">
-        <v-list class="pa-0">
-          <v-list-tile avatar>
-            <v-list-tile-avatar>
-              <img src="https://randomuser.me/api/portraits/men/85.jpg">
-            </v-list-tile-avatar>
-
-            <v-list-tile-content>
-              <v-list-tile-title>John Leider</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-      </v-toolbar>
-
-      <v-list class="pt-0" dense>
-        <v-divider></v-divider>
-
-        <v-list-tile v-for="show in shows" :key="show.name" @click="">
+  <v-app id="home" dark>
+    <v-navigation-drawer v-model="drawer" permanent clipped floating fixed app>
+      <v-list dense>
+        <v-list-tile v-for="show in shows" :key="show.name" @click="loadShow(show)">
           <v-list-tile-content>
             <v-list-tile-title>{{ show.name }}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-  </v-card>
+
+    <v-toolbar app fixed clipped-left>
+      <v-toolbar-title>PiRotechnics</v-toolbar-title>
+    </v-toolbar>
+
+    <v-content>
+      <Show/>
+    </v-content>
+
+  </v-app>
 </template>
 
 <script>
 import axios from 'axios'
+import { bus } from '../workers/bus'
+
+import Show from './Show'
 
 const rootApi = process.env.API_URL + ':' + process.env.API_PORT
 
 export default {
+  components: {
+    Show
+  },
   data () {
     return {
       drawer: true,
-      shows: []
+      shows: [],
+      currentShow: null
     }
   },
   created () {
@@ -57,7 +57,15 @@ export default {
         .catch(e => {
           console.error(e)
         })
+    },
+    getLastDate (show) {
+      if (show.updatedAt) return show.updatedAt
+      else return show.createdAt
+    },
+    loadShow (show) {
+      bus.$emit('loadShow', show)
     }
   }
 }
 </script>
+
