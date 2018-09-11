@@ -3,12 +3,12 @@
     <v-dialog v-model="dialog" persistent max-width="500px">
       <v-card id="frame">
         <v-form ref="form" v-model="valid" lazy-validation>
-          <v-text-field v-model="time" :rules="timeRules" label="Durée" required></v-text-field>
+          <v-text-field v-model="name" :rules="nameRules" label="Nom du show" required></v-text-field>
 
-          <v-btn color="primary" @click="clean" title="Annuler l'étape">
+          <v-btn color="blue darken-1" @click="clean">
             Annuler
           </v-btn>
-          <v-btn :disabled="!valid" @click="submit" title="Ajouter l'étape">
+          <v-btn :disabled="!valid" @click="submit">
             Ajouter
           </v-btn>
         </v-form>
@@ -25,28 +25,19 @@ export default {
     return {
       dialog: false,
       valid: false,
-      show_id: '',
-      orderCursor: 0,
-      time: 0,
-      timeRules: [
-        v => !!v || 'Une durée est obligatoire',
-        v => v !== 0 || 'Une durée ne peut pas être nulle'
-      ]
+      name: '',
+      nameRules: [v => !!v || 'Un nom est obligatoire']
     }
   },
   created () {
-    bus.$on('openAddStep', show_id => {
+    bus.$on('openAddShow', _ => {
       this.dialog = true
-      this.show_id = show_id
     })
   },
   methods: {
     submit () {
       if (this.$refs.form.validate()) {
-        bus.$emit('addStep', {
-          show_id: this.show_id,
-          time: this.time
-        })
+        bus.$emit('addShow', this.name)
         this.clean()
       }
     },

@@ -1,12 +1,18 @@
 <template>
-  <v-app id="home" dark>
-    <v-navigation-drawer v-model="drawer" permanent clipped floating fixed app>
+  <v-app id="home">
+    <v-navigation-drawer permanent clipped floating fixed app>
       <v-list dense>
-        <v-list-tile v-for="show in shows" :key="show.name" @click="loadShow(show)">
+        <v-list-tile v-for="show in shows" :value="show.active" :key="show.name" @click="loadShow(show)" active-class="show.active">
+
           <v-list-tile-content>
             <v-list-tile-title>{{ show.name }}</v-list-tile-title>
           </v-list-tile-content>
+
         </v-list-tile>
+        <v-btn block color="primary" @click="openAddShow" title="Ajouter un show">
+          <v-icon>add</v-icon>
+        </v-btn>
+
       </v-list>
     </v-navigation-drawer>
 
@@ -17,7 +23,7 @@
     <v-content>
       <Show/>
     </v-content>
-
+    <AddShow/>
   </v-app>
 </template>
 
@@ -26,24 +32,35 @@ import axios from 'axios'
 import { bus } from '../workers/bus'
 
 import Show from './Show'
+import AddShow from './AddShow'
 
 const rootApi = process.env.API_URL + ':' + process.env.API_PORT
 
 export default {
   components: {
-    Show
+    Show, AddShow
   },
   data () {
     return {
-      drawer: true,
-      shows: [],
-      currentShow: null
+      shows: []
     }
   },
   created () {
     this.getShows()
+    bus.$on('addShow', name => {
+      this.addShow(name)
+    })
   },
   methods: {
+    addShow (name) {
+      axios
+        .post(rootApi + '/show', {
+          name: name
+        })
+        .then(() => {
+          this.getShows()
+        })
+    },
     getShows () {
       axios
         .get(rootApi + '/show')
@@ -52,6 +69,14 @@ export default {
             const aDate = this.getLastDate(a)
             const bDate = this.getLastDate(b)
             return new Date(bDate) - new Date(aDate)
+          }).map(show => {
+            return {
+              show_id: show.show_id,
+              name: show.name,
+              createdAt: show.createdAt,
+              updatedAt: show.updatedAt,
+              active: false
+            }
           })
         })
         .catch(e => {
@@ -64,8 +89,16 @@ export default {
     },
     loadShow (show) {
       bus.$emit('loadShow', show)
+    },
+    openAddShow () {
+      bus.$emit('openAddShow')
     }
   }
 }
 </script>
 
+<style scoped>
+.active {
+  background-color: blueviolet;
+}
+</style>
