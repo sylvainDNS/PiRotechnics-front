@@ -2,7 +2,7 @@
   <v-app id="home">
     <v-navigation-drawer permanent clipped floating fixed app>
       <v-list dense>
-        <v-list-tile v-for="show in shows" :value="show.active" :key="show.name" @click="loadShow(show)" active-class="show.active">
+        <v-list-tile v-for="show in shows" :value="show.active" :key="show.name" @click="loadShow(show)" active-class="show-active">
 
           <v-list-tile-content>
             <v-list-tile-title>{{ show.name }}</v-list-tile-title>
@@ -89,16 +89,38 @@ export default {
     },
     loadShow (show) {
       bus.$emit('loadShow', show)
+      this.setActive(show)
     },
     openAddShow () {
       bus.$emit('openAddShow')
+    },
+    setActive (_show) {
+      this.shows = this.shows.map(show => {
+        if (show.show_id === _show.show_id) {
+          return {
+            show_id: show.show_id,
+            name: show.name,
+            createdAt: show.createdAt,
+            updatedAt: show.updatedAt,
+            active: true
+          }
+        } else {
+          return { show_id: show.show_id,
+            name: show.name,
+            createdAt: show.createdAt,
+            updatedAt: show.updatedAt,
+            active: false
+          }
+        }
+      })
     }
   }
 }
 </script>
 
 <style scoped>
-.active {
+.show-active {
   background-color: blueviolet;
+  color: red;
 }
 </style>
