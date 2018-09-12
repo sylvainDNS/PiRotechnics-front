@@ -1,17 +1,20 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" persistent max-width="500px">
-      <v-card id="frame">
-        <v-form ref="form" v-model="valid" lazy-validation>
-          <v-text-field v-model="time" :rules="timeRules" label="Durée" required></v-text-field>
-
-          <v-btn color="primary" @click="clean" title="Annuler l'étape">
-            Annuler
-          </v-btn>
-          <v-btn :disabled="!valid" @click="submit" title="Ajouter l'étape">
-            Ajouter
-          </v-btn>
-        </v-form>
+    <v-dialog v-model="dialog" mask="##" classe="frame" persistent max-width="500px" background-color="white">
+      <v-card>
+        <v-btn class="incrementer" fab small>
+          <v-icon x-large>add_circle_outline</v-icon>
+        </v-btn>
+        <v-text-field class="time-field" readonly outline label="Secondes" :value="this.seconds"></v-text-field>
+        <v-btn class="incrementer" fab small>
+          <v-icon x-large>remove_circle_outline</v-icon>
+        </v-btn>
+        <v-btn color="primary" @click="clean" title="Annuler l'étape">
+          Annuler
+        </v-btn>
+        <v-btn @click="submit" title="Ajouter l'étape">
+          Ajouter
+        </v-btn>
       </v-card>
     </v-dialog>
   </v-layout>
@@ -26,12 +29,8 @@ export default {
       dialog: false,
       valid: false,
       show_id: '',
-      orderCursor: 0,
-      time: 0,
-      timeRules: [
-        v => !!v || 'Une durée est obligatoire',
-        v => v !== 0 || 'Une durée ne peut pas être nulle'
-      ]
+      minutes: 0,
+      seconds: 0
     }
   },
   created () {
@@ -39,13 +38,15 @@ export default {
       this.dialog = true
       this.show_id = show_id
     })
+    this.getTime()
   },
   methods: {
     submit () {
       if (this.$refs.form.validate()) {
         bus.$emit('addStep', {
           show_id: this.show_id,
-          time: this.time
+          minutes: this.minutes,
+          seconds: this.seconds
         })
         this.clean()
       }
@@ -59,7 +60,18 @@ export default {
 </script>
 
 <style scoped>
-#frame {
+.frame {
   padding: 0 10px 10px 10px;
+  background-color: #424242 !important;
+  color: #fff;
+}
+
+.time-field {
+  width: 70px;
+}
+
+.incrementer {
+  width: 50px;
+  height: 50px;
 }
 </style>

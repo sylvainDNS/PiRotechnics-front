@@ -1,5 +1,5 @@
 <template>
-  <v-app id="home">
+  <v-app id="home" dark>
     <v-navigation-drawer permanent clipped floating fixed app>
       <v-list dense>
         <v-list-tile v-for="show in shows" :value="show.active" :key="show.name" @click="loadShow(show)" active-class="show-active">
@@ -69,13 +69,19 @@ export default {
             const aDate = this.getLastDate(a)
             const bDate = this.getLastDate(b)
             return new Date(bDate) - new Date(aDate)
-          }).map(show => {
+          }).map((show, index) => {
+            const active = () => {
+              if (index === 0) {
+                this.loadShow(show)
+                return true
+              }
+            }
             return {
               show_id: show.show_id,
               name: show.name,
               createdAt: show.createdAt,
               updatedAt: show.updatedAt,
-              active: false
+              active: active()
             }
           })
         })
@@ -105,7 +111,8 @@ export default {
             active: true
           }
         } else {
-          return { show_id: show.show_id,
+          return {
+            show_id: show.show_id,
             name: show.name,
             createdAt: show.createdAt,
             updatedAt: show.updatedAt,
@@ -118,9 +125,11 @@ export default {
 }
 </script>
 
-<style scoped>
-.show-active {
-  background-color: blueviolet;
-  color: red;
+<style>
+.show-active,
+.show-active:hover,
+#home {
+  background-color: darkgray !important;
+  color: black;
 }
 </style>
