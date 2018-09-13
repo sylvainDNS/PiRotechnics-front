@@ -5,11 +5,18 @@ import App from './App'
 import router from './router'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
-import colors from 'vuetify/es5/util/colors'
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import 'roboto-fontface/css/roboto/roboto-fontface.css'
 
 Vue.use(Vuetify, {
   theme: {
-    info: colors.blueGrey.base
+    primary: '#ffa000',
+    secondary: '#ffc107',
+    accent: '#b388ff',
+    error: '#FF5252',
+    info: '#2196F3',
+    success: '#4CAF50',
+    warning: '#ff7043'
   }
 })
 

@@ -1,86 +1,116 @@
 <template>
-    <v-layout row justify-center>
-        <v-dialog v-model="dialog" persistent max-width="500px">
-            <v-card id="frame">
-                <v-form ref="form" v-model="valid" lazy-validation>
-                    <v-text-field
-                    v-model="time"
-                    :rules="timeRules"
-                    label="Durée"
-                    required
-                    ></v-text-field>
+  <v-dialog v-model="dialog" persistent max-width="250px">
+    <v-card class="show">
+      <v-layout row wrap justify-center>
+        <v-flex xs4 justify-center align-center>
+          <v-icon class="icon noselect" @click="addMinute(1)" dark>add</v-icon>
+          <v-text-field class="time-field" light readonly solo :value="get2Char(this.minutes)" hide-details></v-text-field>
+          <v-icon class="icon noselect" @click="addMinute(-1)" dark>remove</v-icon>
+        </v-flex>
+        <v-flex xs4 justify-center align-center>
+          <v-icon class="icon noselect" @click="addSecond(1)" dark>add</v-icon>
+          <v-text-field class="time-field" light readonly solo :value="get2Char(this.seconds)" hide-details></v-text-field>
+          <v-icon class="icon noselect" @click="addSecond(-1)" dark>remove</v-icon>
+        </v-flex>
 
-                    <v-btn 
-                    color="blue darken-1" 
-                    @click="clean"
-                    title="Annuler l'étape"
-                    >
-                    Annuler
-                    </v-btn>
-                    <v-btn
-                    :disabled="!valid"
-                    @click="submit"
-                    title="Ajouter l'étape"
-                    >
-                    Ajouter
-                    </v-btn>
-                </v-form>
-            </v-card>
-        </v-dialog>
-    </v-layout>
+        <v-flex xs12>
+          <v-btn @click="clean" title="Annuler l'étape">
+            Annuler
+          </v-btn>
+          <v-btn color="secondary" @click="submit" title="Ajouter l'étape">
+            Ajouter
+          </v-btn>
+        </v-flex>
+      </v-layout>
+    </v-card>
+  </v-dialog>
+
 </template>
 
 <script>
 import { bus } from '../workers/bus'
-import axios from 'axios'
-
-const rootApi = process.env.API_URL + ':' + process.env.API_PORT
 
 export default {
-    data() {
-        return {
-            dialog: false,
-            valid: false,
-            show_id: '',
-            orderCursor: 0,
-            time: 0,
-            timeRules: [
-                v => !!v || 'Une durée est obligatoire',
-                v => v != 0 || 'Une durée ne peut pas être nulle'
-            ]
-        }
-    },
-    created() {
-        bus.$on('openAddStep', show => {
-            this.dialog = true
-            this.show_id = show.show_id
-            this.orderCursor = show.steps.length
-        })
-    },
-    methods: {
-        submit() {
-            if (this.$refs.form.validate()) {
-                axios
-                    .post(rootApi + '/step', {
-                        show_id: this.show_id,
-                        time: this.time
-                    })
-                    .then(() => {
-                        this.clean()
-                        bus.$emit('refreshSteps')
-                    })
-            }
-        },
-        clean() {
-            this.dialog = false
-            this.$refs.form.reset()
-        }
+  data () {
+    return {
+      dialog: false,
+      valid: false,
+      show_id: '',
+      minutes: 0,
+      seconds: 0
     }
+  },
+  created () {
+    bus.$on('openAddStep', show_id => {
+      this.dialog = true
+      this.show_id = show_id
+    })
+  },
+  methods: {
+    submit () {
+      bus.$emit('addStep', {
+        show_id: this.show_id,
+        minutes: this.minutes,
+        seconds: this.seconds
+      })
+      this.clean()
+    },
+    clean () {
+      this.dialog = false
+      this.minutes = 0
+      this.seconds = 0
+    },
+    addMinute (digit) {
+      this.minutes += digit
+      if (this.minutes < 0) {
+        this.minutes = 0
+      }
+    },
+    addSecond (digit) {
+      this.seconds += digit
+      if (this.seconds > 59 || this.seconds < 0) {
+        this.seconds = 0
+      }
+    },
+    get2Char (digit) {
+      if (digit < 10) {
+        return '0' + digit
+      } else {
+        return digit
+      }
+    }
+  }
 }
 </script>
 
 <style scoped>
-#frame {
-    padding: 0 10px 10px 10px;
+.show {
+  padding: 10px;
+}
+
+.time-field {
+  text-align: center;
+  height: 50px;
+  width: 70px;
+  z-index: 0;
+}
+
+.incrementer {
+  width: 50px;
+  height: 50px;
+}
+
+.icon {
+  margin-left: 20px;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
 }
 </style>

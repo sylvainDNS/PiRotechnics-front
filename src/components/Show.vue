@@ -1,163 +1,94 @@
 <template>
-    <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-      <v-toolbar dark color="primary">
-        <v-btn icon dark @click.prevent='closeShow()' title="Retour à l'accueil">
-          <v-icon>close</v-icon>
-        </v-btn>
-        <v-toolbar-title>{{ show.name }}</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-toolbar-items>
-          <v-btn
-          round
-          flat
-          title='Supprimer le show'
-          @click.prevent='openDeleteShow()'
-          ><v-icon>delete</v-icon>
-          </v-btn>
-          <v-btn 
-          round
-          flat
-          ><v-icon>whatshot</v-icon>
-          </v-btn>
-        </v-toolbar-items>
-      </v-toolbar>
-      <v-card>
-        <v-container fluid grid-list-md>
-           <v-data-iterator
-            :items="show.steps"
-            :rows-per-page-items="rowsPerPageItems"
-            :pagination.sync="pagination"
-            content-tag="v-layout"
-            row
-            wrap
-            >
-            <v-flex
-              slot="item"
-              slot-scope="props"
-              xs12
-              sm6
-              md4
-              lg3
-            >
-              <v-card>
-                <v-card-title>
-                  <h4>Etape {{ props.index+1 }}</h4>
-                  <v-spacer></v-spacer>
-                  <v-btn flat icon small @click.prevent='deleteStep(props.item.step_id)' title="Supprimer l'étape">
-                    <v-icon dark>close</v-icon>
-                  </v-btn>
-                </v-card-title>
-                
-                <v-divider></v-divider>
-                <v-list dense>
-                  <v-list-tile>
-                    <v-list-tile-content>Durée:</v-list-tile-content>
-                    <v-list-tile-content class="align-end">{{ props.item.time }}</v-list-tile-content>
-                  </v-list-tile>
-                </v-list>
-              </v-card>
-            </v-flex>
-          </v-data-iterator>
-          <v-btn  @click.prevent='openAddStep()'
-            fixed
-            dark
-            fab
-            bottom
-            right
-            color=primary
-            title="Ajouter une étape"
-          >
-            <v-icon>add</v-icon>
-          </v-btn>
-        </v-container>
-      </v-card>
-      <AddStep/>
-      <DeleteShow/>
-    </v-dialog>
+  <v-container fluid grid-list-md>
+    <v-data-iterator :items="currentSteps" :rows-per-page-items="rowsPerPageItems" :pagination.sync="pagination" content-tag="v-layout" row wrap>
+      <v-flex slot="item" slot-scope="props" xs12 sm6 md4 lg3>
+        <v-card>
+          <v-card-title>
+            <h4>Etape {{ props.index+1 }}</h4>
+            <v-spacer></v-spacer>
+            <v-btn flat icon small @click='deleteStep(props.item.step_id)' title="Supprimer l'étape">
+              <v-icon dark>close</v-icon>
+            </v-btn>
+          </v-card-title>
+          <v-divider></v-divider>
+          <v-list dense>
+            <v-list-tile>
+              <v-list-tile-content>Minutage : </v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ get2Char(props.item.minutes) }}:{{ get2Char(props.item.seconds) }}</v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+        </v-card>
+      </v-flex>
+    </v-data-iterator>
+    <v-btn @click='openAddStep' fixed fab bottom right color="secondary" title="Ajouter une étape">
+      <v-icon>add</v-icon>
+    </v-btn>
+    <AddStep/>
+  </v-container>
 </template>
+
 <script>
 import { bus } from '../workers/bus'
-import AddStep from './AddStep'
-import DeleteShow from './DeleteShow'
 import axios from 'axios'
+
+import AddStep from './AddStep'
 
 const rootApi = process.env.API_URL + ':' + process.env.API_PORT
 
 export default {
-    components: {
-        AddStep,
-        DeleteShow
-    },
-    data() {
-        return {
-            dialog: false,
-            show: {
-                show_id: '',
-                name: '',
-                steps: []
-            },
-            editing: false,
-            disabled: true,
-            rowsPerPageItems: [6, 12, 18],
-            pagination: {
-                rowsPerPage: 6
-            }
-        }
-    },
-    created() {
-        bus.$on('openShow', show => {
-            this.dialog = true
-            this.show = show
-        })
-        bus.$on('closeShow', () => {
-            this.dialog = false
-        })
-        bus.$on('refreshSteps', () => {
-            this.getSteps()
-        })
-    },
-    methods: {
-        closeShow() {
-            bus.$emit('refreshShows')
-            this.dialog = false
-        },
-        getSteps() {
-            axios
-                .get(rootApi + '/show/' + this.show.show_id + '/step')
-                .then(response => {
-                    this.show.steps = response.data
-                })
-        },
-        openAddStep() {
-            bus.$emit('openAddStep', this.show)
-        },
-        openDeleteShow() {
-            console.log('delete ?')
-            console.log(this.show)
-            bus.$emit('openDeleteShow', this.show)
-        },
-        deleteStep(step_id) {
-            axios
-                .delete(rootApi + '/step/' + step_id)
-                .then(() => this.getSteps())
-        }
+  components: {
+    AddStep
+  },
+  data () {
+    return {
+      currentSteps: [],
+      currentShow: null,
+      rowsPerPageItems: [6, 12, 18],
+      pagination: {
+        rowsPerPage: 6
+      }
     }
+  },
+  created () {
+    bus.$on('loadShow', show => {
+      this.currentShow = show
+      this.getSteps()
+    })
+    bus.$on('addStep', step => {
+      this.addStep(step)
+    })
+  },
+  methods: {
+    getSteps () {
+      axios
+        .get(rootApi + '/show/' + this.currentShow.show_id + '/step')
+        .then(response => {
+          this.currentSteps = response.data
+        })
+    },
+    deleteStep (step_id) {
+      axios
+        .delete(rootApi + '/step/' + step_id)
+        .then(() => this.getSteps())
+    },
+    openAddStep () {
+      bus.$emit('openAddStep', this.currentShow.show_id)
+    },
+    addStep (step) {
+      axios
+        .post(rootApi + '/step', step)
+        .then(this.getSteps())
+    },
+    get2Char (digit) {
+      if (digit < 10) {
+        return '0' + digit
+      } else {
+        return digit
+      }
+    }
+  }
 }
 </script>
 
 <style scoped>
-.composant {
-    padding: 0 0 0 16px;
-    align-items: flex-end;
-}
-.step {
-    max-width: 50%;
-}
-
-.editor-field div div input:disabled {
-    color: rgb(146, 43, 43);
-}
-.editor-field::after {
-    color: white;
-}
 </style>
