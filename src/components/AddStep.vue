@@ -3,14 +3,14 @@
     <v-dialog v-model="dialog" persistent max-width="500px">
       <v-card>
         <v-flex>
-          <v-icon x-large @click="" color="accent">add_circle_outline</v-icon>
-          <v-text-field class="time-field" light readonly solo :value="this.seconds"></v-text-field>
-          <v-icon x-large @click="" color="accent">remove_circle_outline</v-icon>
+          <v-icon x-large @click="addMinute(1)" color="accent">add_circle_outline</v-icon>
+          <v-text-field class="time-field" light readonly solo :value="this.minutes"></v-text-field>
+          <v-icon x-large @click="addMinute(-1)" color="accent">remove_circle_outline</v-icon>
         </v-flex>
         <v-flex>
-          <v-icon x-large @click="" color="accent">add_circle_outline</v-icon>
+          <v-icon x-large @click="addSecond(1)" color="accent">add_circle_outline</v-icon>
           <v-text-field class="time-field" light readonly solo :value="this.seconds"></v-text-field>
-          <v-icon x-large @click="" color="accent">remove_circle_outline</v-icon>
+          <v-icon x-large @click="addSecond(-1)" color="accent">remove_circle_outline</v-icon>
         </v-flex>
         <v-btn color="secondary" @click="clean" title="Annuler l'étape">
           Annuler
@@ -41,22 +41,32 @@ export default {
       this.dialog = true
       this.show_id = show_id
     })
-    this.getTime()
   },
   methods: {
     submit () {
-      if (this.$refs.form.validate()) {
-        bus.$emit('addStep', {
-          show_id: this.show_id,
-          minutes: this.minutes,
-          seconds: this.seconds
-        })
-        this.clean()
-      }
+      bus.$emit('addStep', {
+        show_id: this.show_id,
+        minutes: this.minutes,
+        seconds: this.seconds
+      })
+      this.clean()
     },
     clean () {
       this.dialog = false
-      this.$refs.form.reset()
+      this.minutes = 0
+      this.seconds = 0
+    },
+    addMinute (number) {
+      this.minutes += number
+      if (this.minutes < 0) {
+        this.minutes = 0
+      }
+    },
+    addSecond (number) {
+      this.seconds += number
+      if (this.seconds > 59 || this.seconds < 0) {
+        this.seconds = 0
+      }
     }
   }
 }

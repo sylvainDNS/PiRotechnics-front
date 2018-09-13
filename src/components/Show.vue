@@ -14,7 +14,7 @@
           <v-list dense>
             <v-list-tile>
               <v-list-tile-content>Minutage : </v-list-tile-content>
-              <v-list-tile-content class="align-end">{{ props.item.time }}</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ props.item.minutes }}:{{ props.item.seconds }}</v-list-tile-content>
             </v-list-tile>
           </v-list>
         </v-card>
