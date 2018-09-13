@@ -1,26 +1,30 @@
 <template>
-  <v-layout row justify-center>
-    <v-dialog v-model="dialog" persistent max-width="500px">
-      <v-card>
-        <v-flex>
-          <v-icon x-large @click="addMinute(1)" color="accent">add_circle_outline</v-icon>
-          <v-text-field class="time-field" light readonly solo :value="this.minutes"></v-text-field>
-          <v-icon x-large @click="addMinute(-1)" color="accent">remove_circle_outline</v-icon>
+  <v-dialog v-model="dialog" persistent max-width="250px">
+    <v-card class="show">
+      <v-layout row wrap justify-center>
+        <v-flex xs4 justify-center align-center>
+          <v-icon class="icon" @click="addMinute(1)" dark>add</v-icon>
+          <v-text-field class="time-field " light readonly solo :value="this.minutes" hide-details></v-text-field>
+          <v-icon class="icon" @click="addMinute(-1)" dark>remove</v-icon>
         </v-flex>
-        <v-flex>
-          <v-icon x-large @click="addSecond(1)" color="accent">add_circle_outline</v-icon>
-          <v-text-field class="time-field" light readonly solo :value="this.seconds"></v-text-field>
-          <v-icon x-large @click="addSecond(-1)" color="accent">remove_circle_outline</v-icon>
+        <v-flex xs4 justify-center align-center>
+          <v-icon class="icon" @click="addSecond(1)" dark>add</v-icon>
+          <v-text-field class="time-field" mask="##" light readonly solo :value="this.seconds" hide-details></v-text-field>
+          <v-icon class="icon" @click="addSecond(1)" dark>remove</v-icon>
         </v-flex>
-        <v-btn color="secondary" @click="clean" title="Annuler l'étape">
-          Annuler
-        </v-btn>
-        <v-btn @click="submit" title="Ajouter l'étape">
-          Ajouter
-        </v-btn>
-      </v-card>
-    </v-dialog>
-  </v-layout>
+
+        <v-flex xs12>
+          <v-btn @click="clean" title="Annuler l'étape">
+            Annuler
+          </v-btn>
+          <v-btn color="secondary" @click="submit" title="Ajouter l'étape">
+            Ajouter
+          </v-btn>
+        </v-flex>
+      </v-layout>
+    </v-card>
+  </v-dialog>
+
 </template>
 
 <script>
@@ -73,16 +77,24 @@ export default {
 </script>
 
 <style scoped>
-.frame {
-  padding: 0 10px 10px 10px;
+.show {
+  padding: 10px;
 }
 
 .time-field {
+  text-align: center;
+  height: 50px;
   width: 70px;
+  z-index: 0;
 }
 
 .incrementer {
   width: 50px;
   height: 50px;
+}
+
+.icon {
+  z-index: 1777 !important;
+  margin-left: 20px;
 }
 </style>
