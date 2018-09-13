@@ -3,14 +3,14 @@
     <v-card class="show">
       <v-layout row wrap justify-center>
         <v-flex xs4 justify-center align-center>
-          <v-icon class="icon" @click="addMinute(1)" dark>add</v-icon>
-          <v-text-field class="time-field " light readonly solo :value="this.minutes" hide-details></v-text-field>
-          <v-icon class="icon" @click="addMinute(-1)" dark>remove</v-icon>
+          <v-icon class="icon noselect" @click="addMinute(1)" dark>add</v-icon>
+          <v-text-field class="time-field" light readonly solo :value="get2Char(this.minutes)" hide-details></v-text-field>
+          <v-icon class="icon noselect" @click="addMinute(-1)" dark>remove</v-icon>
         </v-flex>
         <v-flex xs4 justify-center align-center>
-          <v-icon class="icon" @click="addSecond(1)" dark>add</v-icon>
-          <v-text-field class="time-field" mask="##" light readonly solo :value="this.seconds" hide-details></v-text-field>
-          <v-icon class="icon" @click="addSecond(1)" dark>remove</v-icon>
+          <v-icon class="icon noselect" @click="addSecond(1)" dark>add</v-icon>
+          <v-text-field class="time-field" light readonly solo :value="get2Char(this.seconds)" hide-details></v-text-field>
+          <v-icon class="icon noselect" @click="addSecond(-1)" dark>remove</v-icon>
         </v-flex>
 
         <v-flex xs12>
@@ -60,16 +60,23 @@ export default {
       this.minutes = 0
       this.seconds = 0
     },
-    addMinute (number) {
-      this.minutes += number
+    addMinute (digit) {
+      this.minutes += digit
       if (this.minutes < 0) {
         this.minutes = 0
       }
     },
-    addSecond (number) {
-      this.seconds += number
+    addSecond (digit) {
+      this.seconds += digit
       if (this.seconds > 59 || this.seconds < 0) {
         this.seconds = 0
+      }
+    },
+    get2Char (digit) {
+      if (digit < 10) {
+        return '0' + digit
+      } else {
+        return digit
       }
     }
   }
@@ -94,7 +101,16 @@ export default {
 }
 
 .icon {
-  z-index: 1777 !important;
   margin-left: 20px;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
 }
 </style>

@@ -14,7 +14,7 @@
           <v-list dense>
             <v-list-tile>
               <v-list-tile-content>Minutage : </v-list-tile-content>
-              <v-list-tile-content class="align-end">{{ props.item.minutes }}:{{ props.item.seconds }}</v-list-tile-content>
+              <v-list-tile-content class="align-end">{{ get2Char(props.item.minutes) }}:{{ get2Char(props.item.seconds) }}</v-list-tile-content>
             </v-list-tile>
           </v-list>
         </v-card>
@@ -78,8 +78,14 @@ export default {
       axios
         .post(rootApi + '/step', step)
         .then(this.getSteps())
+    },
+    get2Char (digit) {
+      if (digit < 10) {
+        return '0' + digit
+      } else {
+        return digit
+      }
     }
-
   }
 }
 </script>
