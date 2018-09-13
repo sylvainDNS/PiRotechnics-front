@@ -1,15 +1,18 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" mask="##" classe="frame" persistent max-width="500px" background-color="white">
+    <v-dialog v-model="dialog" persistent max-width="500px">
       <v-card>
-        <v-btn class="incrementer" fab small>
-          <v-icon x-large>add_circle_outline</v-icon>
-        </v-btn>
-        <v-text-field class="time-field" readonly outline label="Secondes" :value="this.seconds"></v-text-field>
-        <v-btn class="incrementer" fab small>
-          <v-icon x-large>remove_circle_outline</v-icon>
-        </v-btn>
-        <v-btn color="primary" @click="clean" title="Annuler l'étape">
+        <v-flex>
+          <v-icon x-large @click="" color="accent">add_circle_outline</v-icon>
+          <v-text-field class="time-field" light readonly solo :value="this.seconds"></v-text-field>
+          <v-icon x-large @click="" color="accent">remove_circle_outline</v-icon>
+        </v-flex>
+        <v-flex>
+          <v-icon x-large @click="" color="accent">add_circle_outline</v-icon>
+          <v-text-field class="time-field" light readonly solo :value="this.seconds"></v-text-field>
+          <v-icon x-large @click="" color="accent">remove_circle_outline</v-icon>
+        </v-flex>
+        <v-btn color="secondary" @click="clean" title="Annuler l'étape">
           Annuler
         </v-btn>
         <v-btn @click="submit" title="Ajouter l'étape">
@@ -62,8 +65,6 @@ export default {
 <style scoped>
 .frame {
   padding: 0 10px 10px 10px;
-  background-color: #424242 !important;
-  color: #fff;
 }
 
 .time-field {

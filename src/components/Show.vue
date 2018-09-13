@@ -20,7 +20,7 @@
         </v-card>
       </v-flex>
     </v-data-iterator>
-    <v-btn @click='openAddStep' fixed fab bottom right color="primary" title="Ajouter une étape">
+    <v-btn @click='openAddStep' fixed fab bottom right color="secondary" title="Ajouter une étape">
       <v-icon>add</v-icon>
     </v-btn>
     <AddStep/>

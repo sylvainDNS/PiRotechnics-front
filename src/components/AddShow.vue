@@ -5,10 +5,10 @@
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field v-model="name" :rules="nameRules" label="Nom du show" required></v-text-field>
 
-          <v-btn color="blue darken-1" @click="clean">
+          <v-btn color="info" @click="clean">
             Annuler
           </v-btn>
-          <v-btn :disabled="!valid" @click="submit">
+          <v-btn color="secondary" :disabled="!valid" @click="submit">
             Ajouter
           </v-btn>
         </v-form>

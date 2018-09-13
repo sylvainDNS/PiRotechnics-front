@@ -9,7 +9,7 @@
           </v-list-tile-content>
 
         </v-list-tile>
-        <v-btn block color="primary" @click="openAddShow" title="Ajouter un show">
+        <v-btn block color="secondary" @click="openAddShow" title="Ajouter un show">
           <v-icon>add</v-icon>
         </v-btn>
 
