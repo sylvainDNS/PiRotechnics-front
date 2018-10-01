@@ -4,13 +4,15 @@
       <v-list dense>
         <v-list-tile v-for="show in shows" :value="show.active" :key="show.name" @click="loadShow(show)" active-class="show-active">
 
-          <v-list-tile-content>
-            <v-list-tile-title>{{ show.name }}</v-list-tile-title>
-          </v-list-tile-content>
+          <router-link :to="show.show_id">
+            <v-list-tile-content>
+              <v-list-tile-title>{{ show.name }}</v-list-tile-title>
+            </v-list-tile-content>
+          </router-link>
 
         </v-list-tile>
         <v-btn block color="secondary" @click="openAddShow" title="Ajouter un show">
-          <v-icon>add</v-icon>
+          <v-icon>fas fa-plus</v-icon>
         </v-btn>
 
       </v-list>
@@ -18,12 +20,16 @@
 
     <v-toolbar app fixed clipped-left>
       <v-toolbar-title>PiRotechnics</v-toolbar-title>
+      <v-btn flat icon color="secondary" absolute right @click="openLaunch">
+        <v-icon>fas fa-fire</i></v-icon>
+      </v-btn>
     </v-toolbar>
 
     <v-content>
-      <Show/>
+      <Show />
     </v-content>
-    <AddShow/>
+    <AddShow />
+    <Launch />
   </v-app>
 </template>
 
@@ -33,12 +39,13 @@ import { bus } from '../workers/bus'
 
 import Show from './Show'
 import AddShow from './AddShow'
+import Launch from './Launch'
 
 const rootApi = process.env.API_URL + ':' + process.env.API_PORT
 
 export default {
   components: {
-    Show, AddShow
+    Show, AddShow, Launch
   },
   data () {
     return {
@@ -57,9 +64,7 @@ export default {
         .post(rootApi + '/show', {
           name: name
         })
-        .then(() => {
-          this.getShows()
-        })
+        .then(() => this.getShows())
     },
     getShows () {
       axios
@@ -100,6 +105,11 @@ export default {
     openAddShow () {
       bus.$emit('openAddShow')
     },
+    openLaunch () {
+      bus.$emit('openLaunch',
+        this.shows.filter(show => show.active === true)[0]
+      )
+    },
     setActive (_show) {
       this.shows = this.shows.map(show => {
         if (show.show_id === _show.show_id) {
@@ -131,5 +141,9 @@ export default {
 #home {
   background-color: darkgray !important;
   color: black;
+}
+
+a {
+  text-decoration: none;
 }
 </style>

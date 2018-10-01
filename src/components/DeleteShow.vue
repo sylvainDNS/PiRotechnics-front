@@ -22,31 +22,31 @@ import axios from 'axios'
 const rootApi = process.env.API_URL + ':' + process.env.API_PORT
 
 export default {
-    data() {
-        return {
-            dialog: false,
-            show: {
-                show_id: '',
-                name: '',
-                steps: []
-            }
-        }
-    },
-    created() {
-        bus.$on('openDeleteShow', show => {
-            console.log('delete !')
-            this.dialog = true
-            this.show = show
-        })
-    },
-    methods: {
-        deleteShow() {
-            axios
-                .delete(rootApi + '/show/' + this.show.show_id)
-                .then(() => bus.$emit('refreshShows'))
-                .then(() => (this.dialog = false))
-                .then(() => bus.$emit('closeShow'))
-        }
+  data () {
+    return {
+      dialog: false,
+      show: {
+        show_id: '',
+        name: '',
+        steps: []
+      }
     }
+  },
+  created () {
+    bus.$on('openDeleteShow', show => {
+      console.log('delete !')
+      this.dialog = true
+      this.show = show
+    })
+  },
+  methods: {
+    deleteShow () {
+      axios
+        .delete(rootApi + '/show/' + this.show.show_id)
+        .then(() => bus.$emit('refreshShows'))
+        .then(() => (this.dialog = false))
+        .then(() => bus.$emit('closeShow'))
+    }
+  }
 }
 </script>

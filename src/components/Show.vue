@@ -7,7 +7,7 @@
             <h4>Etape {{ props.index+1 }}</h4>
             <v-spacer></v-spacer>
             <v-btn flat icon small @click='deleteStep(props.item.step_id)' title="Supprimer l'étape">
-              <v-icon dark>close</v-icon>
+              <v-icon dark>fas fa-times</v-icon>
             </v-btn>
           </v-card-title>
           <v-divider></v-divider>
@@ -21,9 +21,9 @@
       </v-flex>
     </v-data-iterator>
     <v-btn @click='openAddStep' fixed fab bottom right color="secondary" title="Ajouter une étape">
-      <v-icon>add</v-icon>
+      <v-icon>fas fa-plus</v-icon>
     </v-btn>
-    <AddStep/>
+    <AddStep />
   </v-container>
 </template>
 
@@ -77,7 +77,7 @@ export default {
     addStep (step) {
       axios
         .post(rootApi + '/step', step)
-        .then(this.getSteps())
+        .then(() => this.getSteps())
     },
     get2Char (digit) {
       if (digit < 10) {

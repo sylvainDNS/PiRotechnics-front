@@ -3,14 +3,14 @@
     <v-card class="show">
       <v-layout row wrap justify-center>
         <v-flex xs4 justify-center align-center>
-          <v-icon class="icon noselect" @click="addMinute(1)" dark>add</v-icon>
+          <v-icon class="icon noselect" @click="addMinute(1)" dark>fas fa-plus</v-icon>
           <v-text-field class="time-field" light readonly solo :value="get2Char(this.minutes)" hide-details></v-text-field>
-          <v-icon class="icon noselect" @click="addMinute(-1)" dark>remove</v-icon>
+          <v-icon class="icon noselect" @click="addMinute(-1)" dark>fas fa-minus</v-icon>
         </v-flex>
         <v-flex xs4 justify-center align-center>
-          <v-icon class="icon noselect" @click="addSecond(1)" dark>add</v-icon>
+          <v-icon class="icon noselect" @click="addSecond(1)" dark>fas fa-plus</v-icon>
           <v-text-field class="time-field" light readonly solo :value="get2Char(this.seconds)" hide-details></v-text-field>
-          <v-icon class="icon noselect" @click="addSecond(-1)" dark>remove</v-icon>
+          <v-icon class="icon noselect" @click="addSecond(-1)" dark>fas fa-minus</v-icon>
         </v-flex>
 
         <v-flex xs12>

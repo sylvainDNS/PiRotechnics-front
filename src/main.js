@@ -6,6 +6,7 @@ import router from './router'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import '@fortawesome/fontawesome-free/css/all.css'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 
 Vue.use(Vuetify, {
@@ -17,7 +18,8 @@ Vue.use(Vuetify, {
     info: '#2196F3',
     success: '#4CAF50',
     warning: '#ff7043'
-  }
+  },
+  iconfont: 'fa'
 })
 
 Vue.config.productionTip = false
